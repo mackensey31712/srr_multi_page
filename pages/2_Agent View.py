@@ -84,7 +84,7 @@ else:
 
 
     # Log out button
-    if st.button("Log Out"):
+    if st.sidebar.button("Log Out"):
             session_state.user_authenticated = False
             session_state.username = ""
             st.rerun()
