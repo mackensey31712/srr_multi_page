@@ -3,6 +3,10 @@ from session_state import get  # Import the session state module
 import hashlib
 
 def main():
+    # Check if IP address is stored in session state, if not, initialize it
+    if 'ip' not in st.session_state:
+        st.session_state.ip = st.experimental_get_query_params().get('client_ip', [None])[0]
+
     # Get the session ID (hash of the user's IP address)
     session_id = hashlib.md5(st.session_state.ip.encode()).hexdigest()
 
@@ -66,6 +70,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 
