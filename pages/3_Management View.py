@@ -461,7 +461,8 @@ else:
     df_sorted['Avg_On_It_Min'] = df_sorted['Avg_On_It_Sec'] / 60
     df_sorted['Avg_Attended_Min'] = df_sorted['Avg_Attended_Sec'] / 60
 
-
+    st.markdown(":arrow_up: 5 minutes = :red[red]")
+    
     # Define the Altair chart for Avg_On_It_Min
     chart_on_it = alt.Chart(df_sorted).mark_bar().encode(
         x=alt.X('SME', title='SME', sort='-y'),

@@ -18,7 +18,7 @@ if not session_state.user_authenticated:
     st.error("You are not authenticated to access this page.")
 else:
 
-    st.set_page_config(page_title="SRR Agent View", page_icon=":mag_right:", layout="wide")
+    st.set_page_config(page_title="SRR Agent View", page_icon=":headphones:", layout="wide")
 
     # Create functions for computation
     @st.cache_data(ttl=120, show_spinner=True)
