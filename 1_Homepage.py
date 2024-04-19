@@ -1,11 +1,13 @@
 import streamlit as st
 from session_state import get  # Import the session state module
-
-st.set_page_config(page_title="SRR Homepage", page_icon=":page_with_curl:", layout="wide")
+import hashlib
 
 def main():
+    # Get the session ID (hash of the user's IP address)
+    session_id = hashlib.md5(st.session_state.ip.encode()).hexdigest()
+
     # Get the user authentication status and username from the session state
-    session_state = get(user_authenticated=False, username="")
+    session_state = get(user_authenticated=False, username="", session_id=session_id)
     
     if not session_state.user_authenticated:  # Show login form if not authenticated
         st.title("Please Login")
@@ -21,13 +23,15 @@ def main():
                 st.success("Login successful")
                 session_state.user_authenticated = True
                 session_state.username = username
+                # Set a browser cookie to store user authentication information
+                st.session_state[f"user_authenticated_{session_state.session_id}"] = True
+                st.session_state[f"username_{session_state.session_id}"] = username
                 st.rerun()
             else:
-                st.error("😕Incorrect username or password")
-    else:  # Show Homepage if authenticated
+                st.error("😕 Incorrect username or password")
+    else:  # Show the content of the other page if authenticated
         st.title("Homepage")
         st.markdown(f"Welcome, ***{session_state.username}***! to our Streamlit Multipage App")
-        
 
         markdown_text = """
         Our app is designed to provide a comprehensive solution for managing and analyzing srr data. Whether you're a supervisor handling your team's day-to-day operations, a manager seeking insights and oversight, or an analyst diving deep into the data, we have you covered with our streamlined interface and powerful features.
@@ -55,6 +59,9 @@ def main():
         if st.button("Log Out"):
             session_state.user_authenticated = False
             session_state.username = ""
+            # Clear the browser cookies for user authentication information
+            st.session_state[f"user_authenticated_{session_state.session_id}"] = False
+            st.session_state[f"username_{session_state.session_id}"] = ""
             st.rerun()
 
 if __name__ == "__main__":

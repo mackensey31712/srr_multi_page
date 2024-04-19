@@ -19,6 +19,7 @@ session_state = get()
 # Check authentication status before displaying the page content
 if not session_state.user_authenticated:
     st.error("You are not authenticated to access this page.")
+    st.stop()  # Stop further execution
 else:
 
     st.set_page_config(page_title="SRR Management View", page_icon=":mag_right:", layout="wide")
@@ -462,7 +463,7 @@ else:
     df_sorted['Avg_Attended_Min'] = df_sorted['Avg_Attended_Sec'] / 60
 
     st.markdown(":arrow_up: 5 minutes = :red[red]")
-    
+
     # Define the Altair chart for Avg_On_It_Min
     chart_on_it = alt.Chart(df_sorted).mark_bar().encode(
         x=alt.X('SME', title='SME', sort='-y'),

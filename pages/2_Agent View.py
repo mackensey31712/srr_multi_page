@@ -16,6 +16,7 @@ session_state = get()
 # Check authentication status before displaying the page content
 if not session_state.user_authenticated:
     st.error("You are not authenticated to access this page.")
+    st.stop()  # Stop further execution
 else:
 
     st.set_page_config(page_title="SRR Agent View", page_icon=":headphones:", layout="wide")

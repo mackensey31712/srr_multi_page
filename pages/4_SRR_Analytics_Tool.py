@@ -3,11 +3,17 @@ import pandas as pd
 from pygwalker.api.streamlit import StreamlitRenderer, init_streamlit_comm
 from session_state import get  # Import the session state module
 
+session_state = get()
+
 st.set_page_config(page_title="srr anlaytics tool", page_icon= ":bar_chart:", layout="wide")
 
-# Get the user authentication status from the session state
-session_state = get(user_authenticated=False)
+# Check if user authentication status is stored in session state, if not, initialize it
+if 'user_authenticated' not in st.session_state:
+    st.session_state.user_authenticated = False
 
+# Check if username is stored in session state, if not, initialize it
+if 'username' not in st.session_state:
+    st.session_state.username = ""
 
 # Establish communication between PygWalker and Streamlit
 init_streamlit_comm()
