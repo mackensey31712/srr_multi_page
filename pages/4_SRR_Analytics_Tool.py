@@ -1,27 +1,20 @@
 import streamlit as st
 import pandas as pd
 from pygwalker.api.streamlit import StreamlitRenderer, init_streamlit_comm
-from session_state import get  # Import the session state module
-
-session_state = get()
-
-st.set_page_config(page_title="srr anlaytics tool", page_icon= ":bar_chart:", layout="wide")
-
-# Check if user authentication status is stored in session state, if not, initialize it
-if 'user_authenticated' not in st.session_state:
-    st.session_state.user_authenticated = False
-
-# Check if username is stored in session state, if not, initialize it
-if 'username' not in st.session_state:
-    st.session_state.username = ""
-
-# Establish communication between PygWalker and Streamlit
-init_streamlit_comm()
 
 # Check authentication status before displaying the page content
-if not session_state.user_authenticated:
+if "user_authenticated" not in st.session_state:
+    st.session_state.user_authenticated = False
+if "username" not in st.session_state:
+    st.session_state.username = ""
+
+if not st.session_state.user_authenticated:
     st.error("You are not authenticated to access this page.")
+    
 else:
+
+    st.set_page_config(page_title="srr anlaytics tool", page_icon= ":bar_chart:", layout="wide")
+
     # Adjust the width of the Streamlit page
 
      # Main header
@@ -30,11 +23,9 @@ else:
     
     # Log out button
     if st.sidebar.button("Log Out"):
-        session_state.user_authenticated = False
-        session_state.username = ""
+        st.session_state.user_authenticated = False
+        st.session_state.username = ""
         st.rerun()
-        
-
 
     # Function to load data
     @st.cache_data(ttl=120, show_spinner=True)

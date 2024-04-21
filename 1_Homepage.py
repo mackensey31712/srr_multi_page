@@ -1,13 +1,15 @@
 import streamlit as st
-from session_state import get  # Import the session state module
+
 
 st.set_page_config(page_title="SRR Homepage", page_icon=":page_with_curl:", layout="wide")
 
 def main():
-    # Get the user authentication status and username from the session state
-    session_state = get(user_authenticated=False, username="")
+    if "user_authenticated" not in st.session_state:
+        st.session_state.user_authenticated = False
+    if "username" not in st.session_state:
+        st.session_state.username = ""
     
-    if not session_state.user_authenticated:  # Show login form if not authenticated
+    if not st.session_state.user_authenticated:  # Show login form if not authenticated
         st.title("Please Login")
 
         # Access usernames and passwords from secrets.toml
@@ -19,14 +21,14 @@ def main():
         if st.button("Login"):
             if username in usernames_and_passwords and password == usernames_and_passwords[username]:
                 st.success("Login successful")
-                session_state.user_authenticated = True
-                session_state.username = username
+                st.session_state.user_authenticated = True
+                st.session_state.username = username
                 st.rerun()
             else:
                 st.error("😕Incorrect username or password")
     else:  # Show Homepage if authenticated
         st.title("Homepage")
-        st.markdown(f"Welcome, ***{session_state.username}***! to our Streamlit Multipage App")
+        st.markdown(f"Welcome, ***{st.session_state.username}***! to our Streamlit Multipage App")
         
 
         markdown_text = """
@@ -53,8 +55,8 @@ def main():
         # st.write(f"Welcome, {session_state.username}! ")
 
         if st.button("Log Out"):
-            session_state.user_authenticated = False
-            session_state.username = ""
+            st.session_state.user_authenticated = False
+            st.session_state.username = ""
             st.rerun()
 
 if __name__ == "__main__":

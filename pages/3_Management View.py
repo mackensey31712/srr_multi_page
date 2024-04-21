@@ -12,14 +12,16 @@ import pygwalker as pyg
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 from st_aggrid.shared import JsCode
 import plotly.express as px
-from session_state import get  # Import the session state module
-
-session_state = get()
 
 # Check authentication status before displaying the page content
-if not session_state.user_authenticated:
+if "user_authenticated" not in st.session_state:
+    st.session_state.user_authenticated = False
+if "username" not in st.session_state:
+    st.session_state.username = ""
+
+if not st.session_state.user_authenticated:
     st.error("You are not authenticated to access this page.")
-    st.stop()  # Stop further execution
+    
 else:
 
     st.set_page_config(page_title="SRR Management View", page_icon=":mag_right:", layout="wide")
@@ -102,8 +104,8 @@ else:
     five9logo_url = "https://raw.githubusercontent.com/mackensey31712/srr/main/five9log1.png"
 
     if st.sidebar.button("Log Out"):
-            session_state.user_authenticated = False
-            session_state.username = ""
+            st.session_state.user_authenticated = False
+            st.session_state.username = ""
             st.rerun()
 
     st.sidebar.image(five9logo_url, width=200)
