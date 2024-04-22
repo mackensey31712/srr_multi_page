@@ -37,7 +37,7 @@ def main():
         Here's a brief overview of what you can expect from each page:
 
         1. **Homepage**:
-        This is your gateway to the app's functionality. From here, you can navigate to the different sections and explore the tools tailored to your needs.
+        This is your gateway to the app's functionality. From here, you can login and then navigate to the different sections and explore the tools tailored to your needs.
 
         2. **Agent View**:
         Dive into the agent SRR dashboard, where agents can efficiently track and manage service requests. Gain real-time insights into task status, pending requests, and overall performance to optimize workflow and enhance customer satisfaction.
