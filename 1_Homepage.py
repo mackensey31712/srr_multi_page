@@ -40,13 +40,13 @@ def main():
         This is your gateway to the app's functionality. From here, you can login and then navigate to the different sections and explore the tools tailored to your needs.
 
         2. **Agent View**:
-        Dive into the agent SRR dashboard, where agents can efficiently track and manage service requests. Gain real-time insights into task status, pending requests, and overall performance to optimize workflow and enhance customer satisfaction.
+        Dive into the agent SRR dashboard, where SMEs can efficiently track SRRs. Gain real-time insights into SRR status, pending requests, and overall performance to optimize workflow and enhance customer satisfaction.
 
         3. **Management View**:
         Building upon the agent view, the management view provides additional charts and metrics tailored for managerial needs. Gain deeper insights into team performance, resource allocation, and trends over time to make informed decisions and drive operational excellence.
 
         4. **SRR Analytics Tool**:
-        This powerful tool empowers management to explore, transform, and visualize srr data with ease. Utilizing a simple drag-and-drop dashboard interface, users can uncover patterns, identify outliers, and extract valuable insights. Additionally, this page offers basic Exploratory Data Analysis (EDA) to kickstart your data exploration journey.
+        This powerful tool empowers management to explore, transform, and visualize SRR data with ease. Utilizing a simple drag-and-drop dashboard interface, users can uncover patterns, identify outliers, and extract valuable insights. Additionally, this page offers basic Exploratory Data Analysis (EDA) to kickstart your data exploration journey.
 
         Whether you're on the front lines resolving service requests or at the helm steering strategic decisions, our app is here to support you every step of the way. Get ready to unlock the full potential of your SRR data and elevate your operational efficiency with our Five9 SRR Management Multipage App!
         """
