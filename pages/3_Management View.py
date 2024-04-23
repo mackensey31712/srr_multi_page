@@ -113,25 +113,52 @@ else:
     # Sidebar Title
     st.sidebar.markdown('# Select a **Filter:**')
 
-    # Sidebar with a dropdown for 'Service' column filtering
+    # # Sidebar with a dropdown for 'Service' column filtering
+    # with st.sidebar:
+    #     selected_service = st.selectbox('Service', ['All'] + list(df['Service'].unique()))
+
+    # # Apply filtering
+    # if selected_service != 'All':
+    #     df_filtered = df[df['Service'] == selected_service]
+    # else:
+    #     df_filtered = df
+
+    # # Sidebar with a dropdown for 'Month' column filtering
+    # with st.sidebar:
+    #     selected_month = st.selectbox('Month', ['All'] + list(df_filtered['Month'].unique()))
+
+    # # Apply filtering
+    # if selected_month != 'All':
+    #     df_filtered = df_filtered[df_filtered['Month'] == selected_month]
+    # else:
+    #     df_filtered = df_filtered
+    # Sidebar with a multi-select dropdown for 'Service' column filtering
     with st.sidebar:
-        selected_service = st.selectbox('Service', ['All'] + list(df['Service'].unique()))
+        all_services_options = ['All'] + list(df['Service'].unique())
+        selected_service = st.multiselect('Service', all_services_options, default='All')
 
     # Apply filtering
-    if selected_service != 'All':
-        df_filtered = df[df['Service'] == selected_service]
-    else:
+    if 'All' in selected_service:
         df_filtered = df
 
-    # Sidebar with a dropdown for 'Month' column filtering
-    with st.sidebar:
-        selected_month = st.selectbox('Month', ['All'] + list(df_filtered['Month'].unique()))
+    elif not selected_service:
+        # If nothing is selected, display a message indicating all services are being displayed
+        st.sidebar.markdown("<h3 style='color: red;'>Displaying All Services</h1>", unsafe_allow_html=True)
+        df_filtered = df
+    else:
+        df_filtered = df[df['Service'].isin(selected_service)]
+        
+
+    # Create a date_input widget for 'Date Created' column filtering.
+    start_date = st.sidebar.date_input('Start Date', value=df_filtered['Date Created'].min(), min_value=df_filtered['Date Created'].min(), max_value=df_filtered['Date Created'].max())
+    end_date = st.sidebar.date_input('End Date', value=df_filtered['Date Created'].max(), min_value=df_filtered['Date Created'].min(), max_value=df_filtered['Date Created'].max())
+
+    # Convert start_date and end_date to datetime objects
+    start_date = pd.to_datetime(start_date)
+    end_date = pd.to_datetime(end_date)
 
     # Apply filtering
-    if selected_month != 'All':
-        df_filtered = df_filtered[df_filtered['Month'] == selected_month]
-    else:
-        df_filtered = df_filtered
+    df_filtered = df_filtered[(df_filtered['Date Created'] >= start_date) & (df_filtered['Date Created'] <= end_date)]
 
     # Sidebar with a dropdown for 'Weekend?' column filtering
     with st.sidebar:
@@ -406,7 +433,7 @@ else:
     case_counts_sorted = case_counts.sort_values(by='Service', ascending=True)
 
     # Generate a pie chart
-    fig = px.pie(case_counts_sorted, values='Service', names='Case Reason', title='Distribution of Case Reasons')
+    fig = px.pie(case_counts_sorted, values='Service', names='Case Reason', title='Distribution of Case Reasons', hole=0.5)
 
     # Show the pie chart in the Streamlit app
     st.plotly_chart(fig)
