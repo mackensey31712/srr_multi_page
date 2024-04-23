@@ -470,8 +470,10 @@ else:
 
     # Create a download button
     b64 = base64.b64encode(csv.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="interaction_count_by_requestor.csv">Download CSV</a>'
+    href = f'<a href="data:file/csv;base64,{b64}" download="interaction_count_by_requestor.csv">Download in CSV</a>'
     st.markdown(href, unsafe_allow_html=True)
+
+    st.divider
 
     # Creating the Summary Table where it sorts the SME (On It) column by first getting the total average TimeTo: On It and average TimeTo: Attended and then sorting it by the number of Interactions
     # and then by the highest average survey.
