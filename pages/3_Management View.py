@@ -12,6 +12,8 @@ import pygwalker as pyg
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 from st_aggrid.shared import JsCode
 import plotly.express as px
+import io
+import csv
 
 # Check authentication status before displaying the page content
 if "user_authenticated" not in st.session_state:
@@ -57,6 +59,9 @@ else:
         minutes = (seconds % 3600) // 60
         seconds = seconds % 60
         return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+    
+    def convert_df_to_csv(df):
+        return df.to_csv(index=False).encode('utf-8')
 
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
     df = load_data(url).copy()
@@ -458,7 +463,15 @@ else:
     gridOptions = gb.build()
 
     # Display the AgGrid component with the configured options
-    AgGrid(pivot_df, gridOptions=gridOptions, update_mode=GridUpdateMode.MODEL_CHANGED, fit_columns_on_grid_load=True)
+    csv_data = convert_df_to_csv(pivot_df)
+    
+    AgGrid(pivot_df, 
+        gridOptions=gridOptions, 
+        update_mode=GridUpdateMode.MODEL_CHANGED, 
+        fit_columns_on_grid_load=True,
+        download=True,
+        csv_download_data=csv_data,
+        csv_download_filename="interaction_count_by_requestor.csv")
 
     # Creating the Summary Table where it sorts the SME (On It) column by first getting the total average TimeTo: On It and average TimeTo: Attended and then sorting it by the number of Interactions
     # and then by the highest average survey.
