@@ -54,7 +54,7 @@ def main():
         st.markdown(markdown_text)
         # st.write(f"Welcome, {session_state.username}! ")
 
-        if st.button("Log Out"):
+        if st.sidebar.button("Log Out"):
             st.session_state.user_authenticated = False
             st.session_state.username = ""
             st.rerun()
