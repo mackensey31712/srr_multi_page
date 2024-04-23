@@ -12,8 +12,8 @@ import pygwalker as pyg
 from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 from st_aggrid.shared import JsCode
 import plotly.express as px
-import io
-import csv
+import base64
+from io import BytesIO
 
 # Check authentication status before displaying the page content
 if "user_authenticated" not in st.session_state:
@@ -463,15 +463,15 @@ else:
     gridOptions = gb.build()
 
     # Display the AgGrid component with the configured options
-    csv_data = convert_df_to_csv(pivot_df)
-    
-    AgGrid(pivot_df, 
-        gridOptions=gridOptions, 
-        update_mode=GridUpdateMode.MODEL_CHANGED, 
-        fit_columns_on_grid_load=True,
-        download=True,
-        csv_download_data=csv_data,
-        csv_download_filename="interaction_count_by_requestor.csv")
+    AgGrid(pivot_df, gridOptions=gridOptions, update_mode=GridUpdateMode.MODEL_CHANGED, fit_columns_on_grid_load=True)
+
+    # Convert the DataFrame to CSV
+    csv = pivot_df.to_csv(index=False)
+
+    # Create a download button
+    b64 = base64.b64encode(csv.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="interaction_count_by_requestor.csv">Download CSV</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
     # Creating the Summary Table where it sorts the SME (On It) column by first getting the total average TimeTo: On It and average TimeTo: Attended and then sorting it by the number of Interactions
     # and then by the highest average survey.
