@@ -102,15 +102,21 @@ else:
     # Sidebar Title
     st.sidebar.markdown('# Select a **Filter:**')
 
-    # Sidebar with a dropdown for 'Service' column filtering
+    # Sidebar with a multi-select dropdown for 'Service' column filtering
     with st.sidebar:
-        selected_service = st.selectbox('Service', ['All'] + list(df['Service'].unique()))
+        all_services_options = ['All'] + list(df['Service'].unique())
+        selected_service = st.multiselect('Service - (Multi-Select)', all_services_options, default='All')
 
     # Apply filtering
-    if selected_service != 'All':
-        df_filtered = df[df['Service'] == selected_service]
-    else:
+    if 'All' in selected_service:
         df_filtered = df
+
+    elif not selected_service:
+        # If nothing is selected, display a message indicating all services are being displayed
+        st.sidebar.markdown("<h3 style='color: red;'>Displaying All Services</h1>", unsafe_allow_html=True)
+        df_filtered = df
+    else:
+        df_filtered = df[df['Service'].isin(selected_service)]
 
     # Sidebar with a dropdown for 'Month' column filtering
     with st.sidebar:
