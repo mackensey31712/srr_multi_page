@@ -468,10 +468,15 @@ else:
     # Convert the DataFrame to CSV
     csv = pivot_df.to_csv(index=False)
 
-    # Create a download button
-    b64 = base64.b64encode(csv.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="interaction_count_by_requestor.csv">Download in CSV</a>'
-    st.markdown(href, unsafe_allow_html=True)
+    # # Create a download button
+    # b64 = base64.b64encode(csv.encode()).decode()
+    # href = f'<a href="data:file/csv;base64,{b64}" download="interaction_count_by_requestor.csv">Download in CSV</a>'
+    # st.markdown(href, unsafe_allow_html=True)
+
+    csv = pivot_df.to_csv(index=False).encode('utf-8') 
+
+    # Create an download button using st.download_button to download the pivot_df to CSV
+    st.download_button('Download Data', csv, file_name='interaction_count_by_requestor.csv', mime='text/csv',help="Download Interaction Count by Requestor Data in CSV format")
 
     st.divider()
 
