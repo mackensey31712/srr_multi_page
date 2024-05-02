@@ -38,6 +38,38 @@ else:
     url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
     dataframe = load_data(url).copy()
 
+    def convert_to_seconds(time_str):
+        if pd.isnull(time_str):
+            return 0
+        try:
+            h, m, s = map(int, time_str.split(':'))
+            return h * 3600 + m * 60 + s
+        except ValueError:
+            return 0
+
+    def convert_to_minutes(time_str):
+        if pd.isnull(time_str):
+            return 0
+        try:
+            h, m, s = map(int, time_str.split(':'))
+            return (h * 3600 + m * 60 + s) // 60
+        except ValueError:
+            return 0
+
+
+    def seconds_to_hms(seconds):
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+        return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+
+
+    dataframe['TimeTo: On It Sec'] = dataframe['TimeTo: On It'].apply(convert_to_seconds)
+    dataframe['TimeTo: Attended Sec'] = dataframe['TimeTo: Attended'].apply(convert_to_seconds)
+
+    dataframe['TimeTo: On It Min'] = dataframe['TimeTo: On It'].apply(convert_to_minutes)
+    dataframe['TimeTo: Attended Min'] = dataframe['TimeTo: Attended'].apply(convert_to_minutes)
+
     # Display PygWalker interface
     renderer = StreamlitRenderer(dataframe, spec="./gw_config.json", spec_io_mode="rw")
     renderer.render_explore()
