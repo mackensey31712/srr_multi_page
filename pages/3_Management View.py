@@ -208,7 +208,7 @@ else:
         st.sidebar.markdown(
             "<h3 style='color: red;'>Displaying Selected SMEs</h1>",
             unsafe_allow_html=True)
-        
+        df_filtered = df_filtered
 
 
 
