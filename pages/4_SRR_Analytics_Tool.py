@@ -1,6 +1,9 @@
 import streamlit as st
 import pandas as pd
 from pygwalker.api.streamlit import StreamlitRenderer, init_streamlit_comm
+import matplotlib.pyplot as plt
+import seaborn as sns
+import numpy as np
 
 # Check authentication status before displaying the page content
 if "user_authenticated" not in st.session_state:
@@ -72,10 +75,20 @@ else:
 
     # Display PygWalker interface
     renderer = StreamlitRenderer(dataframe, spec="./gw_config.json", spec_io_mode="rw")
-    renderer.render_explore()
+    renderer.explorer()
 
     # Function to perform EDA
     def perform_eda(dataframe):
+        numerical_columns = dataframe.select_dtypes(include=np.number).columns
+        correlation_matrix = dataframe[numerical_columns].corr()
+        
+        fig, ax = plt.subplots(figsize=(10, 10))
+        sns.heatmap(correlation_matrix, annot=True, cmap="coolwarm", vmin=-1, vmax=1, ax=ax)
+        ax.set_title("Correlation Matrix")
+        
+        col1, buff = st.columns(2)
+        with col1:
+            st.pyplot(fig)
         st.markdown("***Dataset Shape:***")
         st.write(dataframe.shape)
         st.divider()
