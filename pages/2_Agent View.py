@@ -28,10 +28,9 @@ else:
     # Create functions for computation
     @st.cache_data(ttl=120, show_spinner=True)
     def load_data(data):
-        df = pd.read_csv(data)
-        df['Date Created'] = pd.to_datetime(df['Date Created'], errors='coerce')  # set 'Date Created' as datetime
-        df.rename(columns={'In process (On It SME)': 'SME (On It)'}, inplace=True)  # Renaming column
-        df.drop('Survey', axis=1, inplace=True)
+        df = data.copy()  # Make a copy to avoid modifying the original DataFrame
+        df['Date Created'] = pd.to_datetime(df['Date Created'], errors='coerce')  
+        df.rename(columns={'In process (On It SME)': 'SME (On It)'}, inplace=True)  
         df['TimeTo: On It (Raw)'] = df['TimeTo: On It'].copy()
         df['TimeTo: Attended (Raw)'] = df['TimeTo: Attended'].copy()
         return df
