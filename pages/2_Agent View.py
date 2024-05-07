@@ -30,7 +30,8 @@ else:
     def load_data(data):
         df = data.copy()  # Make a copy to avoid modifying the original DataFrame
         df['Date Created'] = pd.to_datetime(df['Date Created'], errors='coerce')  
-        df.rename(columns={'In process (On It SME)': 'SME (On It)'}, inplace=True)  
+        df.rename(columns={'In process (On It SME)': 'SME (On It)'}, inplace=True)
+        df.drop('Survey', axis=1, inplace=True)  
         df['TimeTo: On It (Raw)'] = df['TimeTo: On It'].copy()
         df['TimeTo: Attended (Raw)'] = df['TimeTo: Attended'].copy()
         return df
