@@ -32,14 +32,16 @@ else:
 
     # Function to load data
     @st.cache_data(ttl=120, show_spinner=True)
-    def load_data(url):
-        df = pd.read_csv(url)
+    def load_data(data):
+        df = pd.read_csv(data)
         df['Date Created'] = pd.to_datetime(df['Date Created'], errors='coerce')  # set 'Date Created' as datetime
         df.rename(columns={'In process (On It SME)': 'SME (On It)'}, inplace=True)  # Renaming column
         return df
 
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
-    dataframe = load_data(url).copy()
+    # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    data = conn.read(worksheet="Response and Survey Form")
+    df = load_data(data).copy()
 
     def convert_to_seconds(time_str):
         if pd.isnull(time_str):

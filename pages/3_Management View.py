@@ -14,6 +14,7 @@ from st_aggrid.shared import JsCode
 import plotly.express as px
 import base64
 from io import BytesIO
+from streamlit_gsheets import GSheetsConnection
 
 # Check authentication status before displaying the page content
 if "user_authenticated" not in st.session_state:
@@ -33,8 +34,8 @@ else:
     # # -- A1 - END --This is working---
 
     @st.cache_data(ttl=120, show_spinner=True)
-    def load_data(url):
-        df = pd.read_csv(url)
+    def load_data(data):
+        df = pd.read_csv(data)
         df['Date Created'] = pd.to_datetime(df['Date Created'], errors='coerce')  # set 'Date Created' as datetime
         df.rename(columns={'In process (On It SME)': 'SME (On It)'}, inplace=True)  # Renaming column
         df['TimeTo: On It (Raw)'] = df['TimeTo: On It'].copy()
@@ -71,8 +72,11 @@ else:
     def convert_df_to_csv(df):
         return df.to_csv(index=False).encode('utf-8')
 
-    url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
-    df = load_data(url).copy()
+    # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    data = conn.read(worksheet="Response and Survey Form")
+    df = load_data(data).copy()
+    
 
     # Function to load a lottie animation from a URL
     def load_lottieurl(url: str):
