@@ -4,6 +4,7 @@ from pygwalker.api.streamlit import StreamlitRenderer, init_streamlit_comm
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+from streamlit_gsheets import GSheetsConnection
 
 # Check authentication status before displaying the page content
 if "user_authenticated" not in st.session_state:
