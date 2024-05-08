@@ -58,7 +58,7 @@ else:
     # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
 
     conn = st.connection("gsheets", type=GSheetsConnection)
-    data = conn.read(worksheet="Response and Survey Form")
+    data = conn.read(worksheet="Response and Survey Form", usecols=list(range(27)))
     df = load_data(data).copy()
 
     # Function to load a lottie animation from a URL
