@@ -39,6 +39,7 @@ else:
         df.rename(columns={'In process (On It SME)': 'SME (On It)'}, inplace=True)  
         df['TimeTo: On It (Raw)'] = df['TimeTo: On It'].copy()
         df['TimeTo: Attended (Raw)'] = df['TimeTo: Attended'].copy()
+        df.dropna(subset=['Service'], inplace=True)
         return df
 
     # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
