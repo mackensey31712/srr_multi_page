@@ -242,7 +242,7 @@ else:
             # Display Lottie animation if count is 0
             st_lottie(lottie_clap, speed=1, height=100, width=200)  # Adjust height as needed
         with st.expander("Show Data", expanded=False):
-            st.dataframe(df_inqueue, format = "{:.0f}", use_container_width=True)
+            st.dataframe(df_inqueue, use_container_width=True)
     else:
         col1, col2 = st.columns([0.3, 1.2])  # Adjust the ratio as needed for your layout
         with col1:
@@ -251,7 +251,7 @@ else:
             # Display Lottie animation if count is not 0
             st_lottie(lottie_queuing, speed=1, height=100, width=200)  # Adjust height as needed
         with st.expander("Show Data", expanded=False):
-            st.dataframe(df_inqueue, format = "{:.0f}", use_container_width=True)
+            st.dataframe(df_inqueue, use_container_width=True)
 
 
     # Display "In Progress" DataFrame with count
