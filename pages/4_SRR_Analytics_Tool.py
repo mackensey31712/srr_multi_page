@@ -43,7 +43,7 @@ else:
 
     # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
     conn = st.connection("gsheets", type=GSheetsConnection)
-    data = conn.read(worksheet="Response and Survey Form")
+    data = conn.read(worksheet="Response and Survey Form", usecols=list(range(27)))
     dataframe = load_data(data).copy()
 
     def convert_to_seconds(time_str):
