@@ -338,7 +338,7 @@ else:
 
     # Display the filtered dataframe
     st.title('Data')
-    with st.expander('Show Data', expanded=False):
+    with st.expander(':blue[Show Data]', expanded=False):
         st.dataframe(df_filtered[filtered_columns])
 
     "---"
