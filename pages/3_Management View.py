@@ -347,7 +347,7 @@ else:
 
     with col1:
         # Create a bar chart showing the stacked counts of "Service" by "Hour_Created"
-        agg_hour_service = df.groupby(['Hour_Created', 'Service']).size().unstack(fill_value=0).reset_index()
+        agg_hour_service = df_filtered.groupby(['Hour_Created', 'Service']).size().unstack(fill_value=0).reset_index()
 
         # Sum of counts for each hour to use as data labels
         agg_hour_service['Total'] = agg_hour_service.iloc[:, 1:].sum(axis=1)
