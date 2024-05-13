@@ -604,7 +604,7 @@ else:
         tooltip=['SME (On It)', 'count()']
     ).properties(
         title='Interactions Handled',
-        width=800,
+        width=600,
         height=600
     )
 
