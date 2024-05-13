@@ -505,8 +505,8 @@ else:
         tooltip=['Month', 'Category', 'Minutes']  # Optional: add tooltip for interactivity
     ).properties(
         title='Monthly Response Times',
-        width=600,
-        height=400
+        width=800,
+        height=600
     )
 
     # Convert agg_month['TimeTo: On It Minutes'] and agg_month['TimeTo: Attended Minutes'] to h:mm:ss
@@ -549,8 +549,8 @@ else:
         tooltip=['Service', 'Category', 'Minutes']  # Optional: add tooltip for interactivity
     ).properties(
         title='Group Response Times',
-        width=600,
-        height=400
+        width=800,
+        height=600
     )
 
     # Display 'Group Response Times'
@@ -568,16 +568,30 @@ else:
             # Download button
             st.download_button(':green[Download Data]', csv, file_name='group_response_times.csv', mime='text/csv', help="Click to download the Group Response Times in CSV format")
 
-    # Create an interactive bar chart to show the 'unique case count' for each unique 'Service'
-    chart3 = alt.Chart(df_filtered).mark_bar().encode(
-        x='Service',
-        y='count()',
-        tooltip=['Service', 'count()']
-    ).properties(
-        title='Interaction Count',
-        width=600,
-        height=600
-    )
+    # # Create an interactive bar chart to show the 'unique case count' for each unique 'Service'
+    # chart3 = alt.Chart(df_filtered).mark_bar().encode(
+    #     x='Service',
+    #     y='count()',
+    #     tooltip=['Service', 'count()']
+    # ).properties(
+    #     title='Interaction Count',
+    #     width=600,
+    #     height=600
+    # )
+
+    # Get the unique "Service" values and their counts
+    service_counts = df_filtered['Service'].value_counts().reset_index()
+    service_counts.columns = ['Service', 'Count']
+
+    # Create the plotly bar chart
+    chart3 = px.bar(service_counts, x='Service', y='Count', color='Service', text='Count', title='Interaction Count')
+
+    # Add data labels outside the bars
+    chart3.update_traces(textposition='outside')
+    chart3.update_layout(uniformtext_minsize=8, uniformtext_mode='hide', xaxis_tickangle=-0)
+
+    # Adjust chart size
+    chart3.update_layout(width=800, height=600)
 
     # Display 'Interaction Count' chart
     with col1:
