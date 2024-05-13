@@ -353,7 +353,7 @@ else:
         agg_hour_service['Total'] = agg_hour_service.iloc[:, 1:].sum(axis=1)
 
         fig = px.bar(agg_hour_service, x='Hour_Created', y=agg_hour_service.columns[1:-1], title='Hourly Interactions by Service',
-                    labels={'value': 'Interactions', 'Hour_Created': 'Hour of Creation'}, 
+                    labels={'value': 'Interactions', 'Hour_Created': 'Hour of Creation', 'variable': 'Service'}, 
                     category_orders={'Service': agg_hour_service.columns[1:-1]})
         fig.update_layout(barmode='stack')
 
