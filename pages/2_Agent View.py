@@ -374,16 +374,30 @@ else:
     with col5:
         st.write(chart2)
 
-    # Create an interactive bar chart  to show the 'unique case count' for each service
-    chart3 = alt.Chart(df_filtered).mark_bar().encode(
-        x='Service',
-        y='count()',
-        tooltip=['Service', 'count()']
-    ).properties(
-        title='Interaction Count',
-        width=600,
-        height=400
-    )
+    # # Create an interactive bar chart  to show the 'unique case count' for each service
+    # chart3 = alt.Chart(df_filtered).mark_bar().encode(
+    #     x='Service',
+    #     y='count()',
+    #     tooltip=['Service', 'count()']
+    # ).properties(
+    #     title='Interaction Count',
+    #     width=600,
+    #     height=400
+    # )
+
+    # Get the unique "Service" values and their counts
+    service_counts = df_filtered['Service'].value_counts().reset_index()
+    service_counts.columns = ['Service', 'Count']
+
+    # Create the plotly bar chart
+    chart3 = px.bar(service_counts, x='Service', y='Count', color='Service', text='Count', title='Interaction Count')
+
+    # Add data labels outside the bars
+    chart3.update_traces(textposition='outside')
+    chart3.update_layout(uniformtext_minsize=8, uniformtext_mode='hide', xaxis_tickangle=-0)
+
+    # Adjust chart size
+    chart3.update_layout(width=800, height=600)
 
     # To display the chart in your Streamlit app
     with col1:
@@ -396,7 +410,7 @@ else:
         tooltip=['SME (On It)', 'count()']
     ).properties(
         title='Interactions Handled',
-        width=600,
+        width=700,
         height=600
     )
 
