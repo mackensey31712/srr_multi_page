@@ -10,7 +10,7 @@ from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode
 from st_aggrid.shared import JsCode
 import plotly.express as px
 from streamlit_gsheets import GSheetsConnection
-
+from datetime import datetime, timedelta
 
 # Check authentication status before displaying the page content
 if "user_authenticated" not in st.session_state:
@@ -51,10 +51,14 @@ else:
             return 0
 
     def seconds_to_hms(seconds):
-        hours = seconds // 3600
-        minutes = (seconds % 3600) // 60
-        seconds = seconds % 60
-        return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+        if np.isnan(seconds):
+            return "00:00:00"
+        sign = "-" if seconds < 0 else ""
+        seconds = abs(seconds)
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        seconds = int(seconds % 60)
+        return f"{sign}{hours:02d}:{minutes:02d}:{seconds:02d}"
 
     # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
 

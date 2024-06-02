@@ -59,10 +59,14 @@ else:
             return 0
 
     def seconds_to_hms(seconds):
-        hours = seconds // 3600
-        minutes = (seconds % 3600) // 60
-        seconds = seconds % 60
-        return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}"
+        if np.isnan(seconds):
+            return "00:00:00"
+        sign = "-" if seconds < 0 else ""
+        seconds = abs(seconds)
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        seconds = int(seconds % 60)
+        return f"{sign}{hours:02d}:{minutes:02d}:{seconds:02d}"
     
     def minutes_to_hms(minutes):
         hours = int(minutes // 60)
