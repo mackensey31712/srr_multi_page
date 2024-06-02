@@ -407,17 +407,18 @@ else:
     col1, col2 = st.columns(2)
 
     with col1:
-        pivot_table = df_filtered.pivot_table(index='Hour_Created', columns='Case Reason', values='Service', aggfunc='count', fill_value=0)
+        pivot_table = df_filtered.pivot_table(index='Hour_Created', columns='Case Reason', values='Service', aggfunc='count', fill_value=0).reset_index()
+        pivot_table_long = pivot_table.melt(id_vars=['Hour_Created'], var_name='Case Reason', value_name='Count')
 
         # Create the stacked bar chart
-        fig = px.bar(pivot_table, x=pivot_table.index, y=pivot_table.columns, barmode='stack', title='Case Reason Distribution by Hour')
+        fig = px.bar(pivot_table_long, x='Hour_Created', y='Count', color='Case Reason', barmode='stack', title='Case Reason Distribution by Hour')
 
         # Customize the layout
         fig.update_layout(
             xaxis_title='Hour',
             yaxis_title='Count',
             legend_title='Case Reason',
-            xaxis=dict(tickangle=0),  # Rotate x-axis labels by 45 degrees
+            xaxis=dict(tickangle=0)  # Rotate x-axis labels by 45 degrees
         )
 
         # Display the chart in Streamlit
