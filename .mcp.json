@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "desktop-commander": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@wonderwhy-er/desktop-commander"
+      ],
+      "env": {
+        "NVM_DIR": "/usr/local/share/nvm"
+      }
+    }
+  }
+}
