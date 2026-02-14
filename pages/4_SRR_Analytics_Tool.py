@@ -30,6 +30,11 @@ else:
         st.session_state.user_authenticated = False
         st.session_state.username = ""
         st.rerun()
+    
+    # Clear cache button (for debugging)
+    if st.sidebar.button("Clear Cache & Reload"):
+        st.cache_data.clear()
+        st.rerun()
 
     # Function to load data
     @st.cache_data(ttl=120, show_spinner=True)
@@ -40,12 +45,32 @@ else:
         df['TimeTo: On It (Raw)'] = df['TimeTo: On It'].copy()
         df['TimeTo: Attended (Raw)'] = df['TimeTo: Attended'].copy()
         df.dropna(subset=['Service'], inplace=True)
+        
+        # Fix mixed data types for Arrow compatibility
+        # Convert mixed-type columns to strings
+        if 'Article#' in df.columns:
+            df['Article#'] = df['Article#'].astype(str)
+        if 'Case #' in df.columns:
+            df['Case #'] = df['Case #'].astype(str)
+        if 'Service' in df.columns:
+            df['Service'] = df['Service'].astype(str)
+        
+        # Ensure all object columns are strings
+        object_cols = df.select_dtypes(include=['object']).columns
+        for col in object_cols:
+            df[col] = df[col].astype(str)
+        
         return df
 
     # url = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSQVnfH-edbXqAXxlCb2FrhxxpsOHJhtqKMYsHWxf5SyLVpAPTSIWQeIGrBAGa16dE4CA59o2wyz59G/pub?gid=0&single=true&output=csv'
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    data = conn.read(worksheet="Response and Survey Form", usecols=list(range(27)))
-    dataframe = load_data(data).copy()
+    try:
+        conn = st.connection("gsheets", type=GSheetsConnection)
+        data = conn.read(worksheet="Response and Survey Form", usecols=list(range(27)))
+        dataframe = load_data(data).copy()
+    except Exception as e:
+        st.error(f"Error loading data: {str(e)}")
+        st.exception(e)
+        st.stop()
 
     def convert_to_seconds(time_str):
         if pd.isnull(time_str):
@@ -80,8 +105,16 @@ else:
     dataframe['TimeTo: Attended Min'] = dataframe['TimeTo: Attended'].apply(convert_to_minutes)
 
     # Display PygWalker interface
-    renderer = StreamlitRenderer(dataframe, spec="./gw_config.json", spec_io_mode="rw")
-    renderer.explorer()
+    try:
+        # Initialize streamlit communication for PygWalker
+        init_streamlit_comm()
+        
+        # Use a unique key to prevent re-rendering
+        renderer = StreamlitRenderer(dataframe, spec="./gw_config.json", spec_io_mode="rw")
+        renderer.explorer(key="pygwalker_explorer")
+    except Exception as e:
+        st.error(f"Error rendering PygWalker: {str(e)}")
+        st.exception(e)
 
     # Function to perform EDA
     def perform_eda(dataframe):
@@ -113,7 +146,7 @@ else:
 
         # Display summary statistics
         st.markdown("***Summary Statistics***")
-        st.write(dataframe.describe(include='all'))
+        st.write(dataframe.describe(include='all', datetime_is_numeric=True))
         
         st.divider()
         unique_values = dataframe.nunique()
@@ -165,6 +198,10 @@ else:
 
     # Display EDA
     if dataframe is not None:
-        perform_eda(dataframe)
+        try:
+            perform_eda(dataframe)
+        except Exception as e:
+            st.error(f"Error performing EDA: {str(e)}")
+            st.exception(e)
     else:
         st.header("Error Reading Data")

@@ -100,9 +100,7 @@ else:
     col1, col2 = st.columns([3, .350])
     with col2:
         if st.button(':red[Refresh Data]'):
-            # st.experimental_memo.clear()
             st.cache_data.clear()
-            # st.experimental_rerun()
             st.rerun()
 
     # Center align 'five9 srr agent view'
